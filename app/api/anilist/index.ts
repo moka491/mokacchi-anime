@@ -1,3 +1,4 @@
+import handleErrors from "./error-handling";
 import {
   CURRENT_USER_QUERY,
   ANIME_SEARCH_QUERY,
@@ -34,6 +35,7 @@ export function searchAnime(search: string): Promise<Anime[]> {
       },
     }),
   })
+    .then(handleErrors)
     .then((resp) => resp.json())
     .then((json) => json.data?.Page.media || []);
 }
@@ -53,6 +55,7 @@ export function getAnimeCharactersAndSeiyuus(
       },
     }),
   })
+    .then(handleErrors)
     .then((resp) => resp.json())
     .then(
       (json) =>
@@ -82,6 +85,7 @@ export function getSeiyuuAnimeRoles(
       },
     }),
   })
+    .then(handleErrors)
     .then((resp) => resp.json())
     .then(
       (json) =>
