@@ -1,4 +1,11 @@
-import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "remix";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+} from "remix";
 import type { MetaFunction } from "remix";
 
 import styles from "./tailwind.css";
@@ -12,7 +19,17 @@ export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
 };
 
-export default function AppRoot() {
+export async function loader() {
+  return {
+    ENV: {
+      ANILIST_CLIENT_ID: process.env.ANILIST_CLIENT_ID,
+    },
+  };
+}
+
+export default function Root() {
+  const data = useLoaderData();
+
   return (
     <html lang="en">
       <head>
@@ -25,6 +42,11 @@ export default function AppRoot() {
         <App />
         <ScrollRestoration />
         <Scripts />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(data.ENV)}`,
+          }}
+        />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>

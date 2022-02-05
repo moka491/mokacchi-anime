@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { getAnimeCharactersAndSeiyuus } from "~/api/anilist";
 import { Anime, CharacterWithSeiyuus } from "~/api/anilist/types";
 import AnimeSearchInput from "~/components/anime/AnimeSearchInput";
-import SeiyuuCard from "~/components/anime/SeiyuuCard";
 import SeiyuuCharacterCard from "~/components/anime/SeiyuuCharacterCard";
 import SeiyuuOtherRolesColumn from "~/components/anime/SeiyuuOtherRolesColumn";
 import Checkbox from "~/components/shared/Checkbox";

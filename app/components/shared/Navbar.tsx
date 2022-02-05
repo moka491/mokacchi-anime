@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useLoaderData } from "remix";
 import { AuthContext } from "~/context/AuthContext";
 import Avatar from "./Avatar";
 
@@ -7,8 +8,7 @@ export default function Navbar({ title = "", children }) {
 
   function onAvatarClick() {
     if (!loggedIn) {
-      window.location.href =
-        "https://anilist.co/api/v2/oauth/authorize?client_id=7470&response_type=token";
+      window.location.href = `https://anilist.co/api/v2/oauth/authorize?client_id=${window.env.ANILIST_CLIENT_ID}&response_type=token`;
     } else {
       logout();
     }

@@ -11,6 +11,11 @@ type Props = {
   onlyUserAnime?: boolean;
 };
 
+type RolesState = {
+  roles: SeiyuuRole[];
+  rolesUserOnly: SeiyuuRole[];
+};
+
 export default function SeiyuuOtherRolesColumn({
   seiyuu,
   excludeCharacterId,
@@ -18,20 +23,33 @@ export default function SeiyuuOtherRolesColumn({
 }: Props) {
   const { token } = useContext(AuthContext);
 
-  const [otherRoles, setOtherRoles] = useState<SeiyuuRole[]>([]);
+  const [roleState, setRoleState] = useState<RolesState>({
+    roles: [],
+    rolesUserOnly: [],
+  });
+
+  const roles = onlyUserAnime ? roleState.rolesUserOnly : roleState.roles;
 
   useEffect(() => {
-    getSeiyuuAnimeRoles(seiyuu.id, onlyUserAnime, token)
-      .then((roles) =>
-        roles.filter((r) => r.character.id !== excludeCharacterId)
-      )
-      .then((roles) => setOtherRoles(roles));
+    if (!roles.length) {
+      getSeiyuuAnimeRoles(seiyuu.id, onlyUserAnime, token)
+        .then((roles) =>
+          roles.filter((r) => r.character.id !== excludeCharacterId)
+        )
+        .then((roles) => {
+          setRoleState(
+            onlyUserAnime
+              ? { ...roleState, rolesUserOnly: roles }
+              : { ...roleState, roles }
+          );
+        });
+    }
   }, [onlyUserAnime]);
 
   return (
     <div className="flex flex-col gap-4">
       <SeiyuuCard seiyuu={seiyuu} />
-      {otherRoles.map((role) => (
+      {roles.map((role) => (
         <SeiyuuRoleCard
           key={role.anime.id + " " + role.character.id}
           role={role}

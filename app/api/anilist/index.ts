@@ -72,7 +72,7 @@ export function getSeiyuuAnimeRoles(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
+      ...(accessToken && { Authorization: "Bearer " + accessToken }),
     },
     body: JSON.stringify({
       query: SEIYUU_ROLES_QUERY,
