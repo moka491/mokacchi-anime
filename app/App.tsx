@@ -6,11 +6,9 @@ import { AuthProvider } from "./context/AuthContext";
 export default function App() {
   return (
     <AuthProvider>
-      <div className="h-full min-h-screen bg-bgPrimary">
-        <Navbar title="Anime Apps">
-          <NavbarLink title="Seiyuu Lookup" to="" />
-          <NavbarLink title="More coming soon.." to="" />
-        </Navbar>
+      <div className="flex flex-col h-screen bg-bgPrimary">
+        <Navbar />
+
         <Outlet />
       </div>
     </AuthProvider>

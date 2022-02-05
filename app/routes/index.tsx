@@ -23,8 +23,8 @@ export default function SeiyuuLookup() {
   }
 
   return (
-    <div className="pt-5">
-      <div className="flex items-center justify-center gap-8">
+    <div className="flex flex-col flex-grow overflow-auto">
+      <div className="flex items-center justify-center gap-8 py-4">
         <AnimeSearchInput onAnimeSelected={onAnimeSelected} />
         <Checkbox
           label="Only my Anime"
@@ -34,7 +34,7 @@ export default function SeiyuuLookup() {
         />
       </div>
 
-      <div className="grid grid-flow-col gap-4 px-5 pb-5 mt-4 overflow-auto place-content-start">
+      <div className="grid h-full grid-flow-col gap-4 px-5 pb-5 overflow-auto place-content-start">
         {characterResults.map((character) => (
           <div key={character.id} className="w-[250px] flex flex-col gap-4">
             <SeiyuuCharacterCard character={character} />
