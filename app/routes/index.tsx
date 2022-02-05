@@ -34,7 +34,7 @@ export default function SeiyuuLookup() {
         />
       </div>
 
-      <div className="grid grid-flow-col gap-4 px-5 pb-5 mt-4 overflow-auto">
+      <div className="grid grid-flow-col gap-4 px-5 pb-5 mt-4 overflow-auto place-content-start">
         {characterResults.map((character) => (
           <div key={character.id} className="w-[250px] flex flex-col gap-4">
             <SeiyuuCharacterCard character={character} />
