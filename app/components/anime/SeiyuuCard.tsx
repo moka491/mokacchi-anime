@@ -15,7 +15,12 @@ export default function SeiyuuCard({ seiyuu }: Props) {
         />
         <span>
           <div className="text-textSecondary">Voiced by</div>
-          <div className="text-lg text-textPrimary">{seiyuu.name.full}</div>
+          <a
+            className="text-lg text-textPrimary hover:text-primary"
+            href={`https://anilist.co/staff/${seiyuu.id}`}
+          >
+            {seiyuu.name.full}
+          </a>
         </span>
       </div>
     </Card>

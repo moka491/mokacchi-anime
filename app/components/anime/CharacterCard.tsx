@@ -13,7 +13,12 @@ export default function SeiyuuCharacterCard({ character }: Props) {
           src={character.image.medium}
           className="object-cover mb-2 rounded-full w-9 h-9"
         />
-        <div className="text-textPrimary">{character.name.full}</div>
+        <a
+          className="text-textPrimary hover:text-primary"
+          href={`https://anilist.co/character/${character.id}`}
+        >
+          {character.name.full}
+        </a>
         <div className="text-sm text-textSecondary">
           {character.name.native}
         </div>

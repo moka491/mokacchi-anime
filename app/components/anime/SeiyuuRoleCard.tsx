@@ -13,12 +13,24 @@ export default function SeiyuuRoleCard({ role }: Props) {
           src={role.character.image.medium}
           className="object-cover w-8 h-8 rounded-full"
         />
-        <span>
-          <div className="text-textPrimary">{role.character.name.full}</div>
-          <div className="text-sm text-textSecondary">
-            {role.anime.title.romaji}
+        <div>
+          <div>
+            <a
+              className=" text-textPrimary hover:text-primary"
+              href={`https://anilist.co/character/${role.character.id}`}
+            >
+              {role.character.name.full}
+            </a>
           </div>
-        </span>
+          <div>
+            <a
+              className="text-sm text-textSecondary hover:text-primary"
+              href={`https://anilist.co/anime/${role.anime.id}`}
+            >
+              {role.anime.title.romaji}
+            </a>
+          </div>
+        </div>
       </div>
     </Card>
   );
