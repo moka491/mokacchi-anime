@@ -1,15 +1,8 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "remix";
+import { Links, LiveReload, Meta, Scripts, ScrollRestoration } from "remix";
 import type { MetaFunction } from "remix";
 
 import styles from "./tailwind.css";
-import { AuthProvider } from "./context/AuthContext";
+import App from "./App";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -19,7 +12,7 @@ export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
 };
 
-export default function App() {
+export default function AppRoot() {
   return (
     <html lang="en">
       <head>
@@ -29,9 +22,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <AuthProvider>
-          <Outlet />
-        </AuthProvider>
+        <App />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
