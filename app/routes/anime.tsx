@@ -6,8 +6,8 @@ export default function AnimeIndex() {
   return (
     <div className="h-full min-h-screen bg-bgPrimary">
       <Navbar title="Anime Apps">
+        <NavbarLink title="Seiyuu Lookup" to="" />
         <NavbarLink title="Anime Calendar" to="" />
-        <NavbarLink title="Seiyuu Lookup" to="seiyuus" />
         {/* <NavbarLink title="Watch Date Fix" link="seiyuus" />
         <NavbarLink title="Anime Bluray Sales" link="seiyuus" /> */}
       </Navbar>

@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.0.15 | MIT License | https://tailwindcss.com
+! tailwindcss v3.0.18 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -517,10 +517,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: flex;
 }
 
-.inline-flex {
-  display: inline-flex;
-}
-
 .grid {
   display: grid;
 }
@@ -610,17 +606,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-auto-flow: column;
 }
 
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.grid-cols-\[auto_auto\] {
-  grid-template-columns: auto auto;
-}
-
 .grid-cols-\[max-content_auto\] {
   grid-template-columns: -webkit-max-content auto;
   grid-template-columns: max-content auto;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -772,14 +764,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1.75rem;
 }
 
-.text-textSecondary {
-  --tw-text-opacity: 1;
-  color: rgb(110 137 175 / var(--tw-text-opacity));
-}
-
 .text-textPrimary {
   --tw-text-opacity: 1;
   color: rgb(190 212 244 / var(--tw-text-opacity));
+}
+
+.text-textSecondary {
+  --tw-text-opacity: 1;
+  color: rgb(110 137 175 / var(--tw-text-opacity));
 }
 
 .opacity-30 {
