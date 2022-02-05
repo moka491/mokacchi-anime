@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   return {
-    ENV: {
+    env: {
       ANILIST_CLIENT_ID: process.env.ANILIST_CLIENT_ID,
     },
   };
@@ -44,7 +44,7 @@ export default function Root() {
         <Scripts />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(data.ENV)}`,
+            __html: `window.env = ${JSON.stringify(data.env)}`,
           }}
         />
         {process.env.NODE_ENV === "development" && <LiveReload />}
