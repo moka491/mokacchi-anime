@@ -11,9 +11,7 @@ export default function App() {
           <NavbarLink title="Seiyuu Lookup" to="" />
           <NavbarLink title="Anime Calendar" to="" />
         </Navbar>
-        <div className="p-5">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </AuthProvider>
   );

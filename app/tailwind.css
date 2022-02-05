@@ -497,6 +497,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: auto;
 }
 
+.mt-4 {
+  margin-top: 16px;
+}
+
 .mr-2 {
   margin-right: 8px;
 }
@@ -507,10 +511,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .ml-auto {
   margin-left: auto;
-}
-
-.mt-4 {
-  margin-top: 16px;
 }
 
 .flex {
@@ -553,6 +553,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   min-height: 100vh;
 }
 
+.w-\[250px\] {
+  width: 250px;
+}
+
 .w-\[27px\] {
   width: 27px;
 }
@@ -571,10 +575,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-4 {
   width: 16px;
-}
-
-.w-\[250px\] {
-  width: 250px;
 }
 
 .max-w-\[400px\] {
@@ -631,20 +631,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   justify-content: center;
 }
 
-.gap-3 {
-  gap: 10px;
+.gap-8 {
+  gap: 48px;
 }
 
 .gap-4 {
   gap: 16px;
 }
 
-.gap-5 {
-  gap: 18px;
+.gap-3 {
+  gap: 10px;
 }
 
-.gap-8 {
-  gap: 48px;
+.gap-5 {
+  gap: 18px;
 }
 
 .overflow-auto {
@@ -707,10 +707,6 @@ Ensure the default browser behavior of the `hidden` attribute.
      object-fit: cover;
 }
 
-.p-5 {
-  padding: 18px;
-}
-
 .p-3 {
   padding: 10px;
 }
@@ -743,6 +739,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .px-2 {
   padding-left: 8px;
   padding-right: 8px;
+}
+
+.pt-5 {
+  padding-top: 18px;
+}
+
+.pb-5 {
+  padding-bottom: 18px;
 }
 
 .align-sub {
