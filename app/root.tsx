@@ -16,7 +16,7 @@ export function links() {
 }
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Anime Apps" };
 };
 
 export async function loader() {
