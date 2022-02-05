@@ -8,7 +8,7 @@ import SeiyuuRoleCard from "./SeiyuuRoleCard";
 type Props = {
   seiyuu: Seiyuu;
   excludeCharacterId?: number;
-  onlyUserAnime?: boolean;
+  showUserAnime?: boolean;
 };
 
 type RolesState = {

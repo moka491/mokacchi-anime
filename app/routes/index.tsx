@@ -14,7 +14,7 @@ export default function SeiyuuLookup() {
     CharacterWithSeiyuus[]
   >([]);
 
-  const [onlyUserAnime, setOnlyUserAnime] = useState(false);
+  const [showUserAnime, setShowUserAnime] = useState(false);
 
   function onAnimeSelected(anime: Anime) {
     getAnimeCharactersAndSeiyuus(anime.id).then((res) =>
@@ -29,8 +29,8 @@ export default function SeiyuuLookup() {
         <Checkbox
           label="Only my Anime"
           disabled={!loggedIn}
-          checked={onlyUserAnime}
-          onChange={(e) => setOnlyUserAnime(e.target.checked)}
+          checked={showUserAnime}
+          onChange={(e) => setShowUserAnime(e.target.checked)}
         />
       </div>
 
@@ -43,7 +43,7 @@ export default function SeiyuuLookup() {
               <SeiyuuOtherRolesColumn
                 seiyuu={character.seiyuus[0]}
                 excludeCharacterId={character.id}
-                onlyUserAnime={onlyUserAnime}
+                showUserAnime={showUserAnime}
               />
             )}
           </div>
