@@ -58,32 +58,34 @@ query($animeId: Int) {
 `;
 
 export const SEIYUU_ROLES_QUERY = `
-query ($seiyuuId: Int, $onList: Boolean) {
-    Staff(id: $seiyuuId) {
-      characterMedia(perPage: 100 sort: FAVOURITES_DESC onList: $onList) {
-        edges {
-          characters {
-            id
-            name {
-                full
-                native
+query staff($seiyuuId: Int, $onList: Boolean) {
+  Staff(id: $seiyuuId) {
+    characters(page: 1, sort: FAVOURITES_DESC) {
+      edges {
+        node {
+          id
+          name {
+            full
+            native
+          }
+          image {
+            medium
+          }
+          media(sort: FAVOURITES_DESC, onList: $onList, perPage: 1, type: ANIME) {
+            nodes {
+              id,
+              title {
+                romaji
+                english
               }
-              image {
+              coverImage {
                 medium
               }
-          }
-          node {
-            id,
-            title {
-              romaji
-              english
-            }
-            coverImage {
-              medium
             }
           }
         }
       }
     }
   }
+}
 `;

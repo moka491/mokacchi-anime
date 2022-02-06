@@ -1,3 +1,4 @@
+import { filterMap } from "~/utils/filterMap";
 import handleErrors from "./error-handling";
 import {
   CURRENT_USER_QUERY,
@@ -87,11 +88,16 @@ export function getSeiyuuAnimeRoles(
   })
     .then(handleErrors)
     .then((resp) => resp.json())
-    .then(
-      (json) =>
-        json.data?.Staff.characterMedia.edges.map((edge) => ({
-          character: edge.characters[0] ?? null,
-          anime: edge.node,
-        })) || []
+    .then((json) =>
+      json.data?.Staff.characters.edges
+        .filter((edge) => !!edge.node.media?.nodes[0])
+        .map((edge) => {
+          const { media, ...character } = edge.node;
+
+          return {
+            character,
+            anime: media.nodes[0],
+          };
+        })
     );
 }
