@@ -1,3 +1,8 @@
+export type Paginated<T> = {
+  data: T;
+  hasNextPage: boolean;
+};
+
 export type UserInfo = {
   id: string;
   name: string;

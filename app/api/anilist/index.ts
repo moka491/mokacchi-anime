@@ -1,4 +1,3 @@
-import { filterMap } from "~/utils/filterMap";
 import handleErrors from "./error-handling";
 import {
   CURRENT_USER_QUERY,
@@ -6,7 +5,13 @@ import {
   CHARARCTER_SEIYUU_QUERY,
   SEIYUU_ROLES_QUERY,
 } from "./queries";
-import { UserInfo, Anime, CharacterWithSeiyuus, SeiyuuRole } from "./types";
+import {
+  UserInfo,
+  Anime,
+  CharacterWithSeiyuus,
+  SeiyuuRole,
+  Paginated,
+} from "./types";
 
 export function getCurrentUserInfo(accessToken: string): Promise<UserInfo> {
   return fetch("https://graphql.anilist.co", {
@@ -70,8 +75,9 @@ export function getAnimeCharactersAndSeiyuus(
 export function getSeiyuuAnimeRoles(
   seiyuuId: number,
   onList: boolean,
+  page: number = 1,
   accessToken?: string
-): Promise<SeiyuuRole[]> {
+): Promise<Paginated<SeiyuuRole[]>> {
   return fetch("https://graphql.anilist.co", {
     method: "POST",
     headers: {
@@ -83,13 +89,14 @@ export function getSeiyuuAnimeRoles(
       variables: {
         seiyuuId,
         onList,
+        page,
       },
     }),
   })
     .then(handleErrors)
     .then((resp) => resp.json())
-    .then((json) =>
-      json.data?.Staff.characters.edges
+    .then((json) => {
+      const data = json.data?.Staff.characters.edges
         .filter((edge) => !!edge.node.media?.nodes[0])
         .map((edge) => {
           const { media, ...character } = edge.node;
@@ -98,6 +105,11 @@ export function getSeiyuuAnimeRoles(
             character,
             anime: media.nodes[0],
           };
-        })
-    );
+        });
+
+      const hasNextPage =
+        json.data?.Staff.characters.pageInfo.hasNextPage || false;
+
+      return { data, hasNextPage };
+    });
 }

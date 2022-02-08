@@ -14,7 +14,8 @@ type Props = {
 
 type RolesState = {
   roles: SeiyuuRole[];
-  rolesUserOnly: SeiyuuRole[];
+  page: number;
+  hasNextPage: boolean;
 };
 
 export default function SeiyuuOtherRolesColumn({
@@ -23,46 +24,67 @@ export default function SeiyuuOtherRolesColumn({
   showUserAnime = false,
 }: Props) {
   const { token } = useContext(AuthContext);
-  const { ref, inView } = useInView();
+  const [visibleHookRef, inView] = useInView({});
 
-  const [roleState, setRoleState] = useState<RolesState>({
+  const [entries, setEntries] = useState<RolesState>({
     roles: [],
-    rolesUserOnly: [],
+    page: 1,
+    hasNextPage: true,
   });
 
-  const roles = showUserAnime ? roleState.rolesUserOnly : roleState.roles;
+  const [userEntries, setUserEntries] = useState<RolesState>({
+    roles: [],
+    page: 1,
+    hasNextPage: true,
+  });
+
+  const state = showUserAnime ? userEntries : entries;
 
   useEffect(() => {
-    // only load data if not already cached and the component is in view
-    if (!roles.length && inView) {
+    // if end of list is in sight and there's more data, load and cache it
+    if (state.hasNextPage && inView) {
       getSeiyuuAnimeRoles(
         seiyuu.id,
         showUserAnime,
+        state.page,
         showUserAnime ? token : null
-      )
-        .then((roles) =>
-          roles.filter((r) => r.character.id !== excludeCharacterId)
-        )
-        .then((roles) => {
-          setRoleState(
-            showUserAnime
-              ? { ...roleState, rolesUserOnly: roles }
-              : { ...roleState, roles }
-          );
-        });
+      ).then((resp) => {
+        const filteredRoles = resp.data?.filter(
+          (r) => r.character.id !== excludeCharacterId
+        );
+
+        if (showUserAnime) {
+          setUserEntries({
+            roles: [...userEntries.roles, ...filteredRoles],
+            page: userEntries.page + 1,
+            hasNextPage: resp.hasNextPage,
+          });
+        } else {
+          setEntries({
+            roles: [...entries.roles, ...filteredRoles],
+            page: entries.page + 1,
+            hasNextPage: resp.hasNextPage,
+          });
+        }
+      });
     }
-  }, [showUserAnime, inView]);
+  }, [inView]);
 
   return (
-    <div ref={ref} className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <SeiyuuCard seiyuu={seiyuu} />
 
-      {roles.map((role) => (
+      {state.roles.map((role) => (
         <SeiyuuRoleCard
           key={role.anime.id + " " + role.character.id}
           role={role}
         />
       ))}
+      <div ref={visibleHookRef}>
+        {inView
+          ? `in view, page: ${state.page}, hasNextPage: ${state.hasNextPage}`
+          : "not in view"}
+      </div>
     </div>
   );
 }

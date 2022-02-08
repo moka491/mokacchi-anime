@@ -58,9 +58,12 @@ query($animeId: Int) {
 `;
 
 export const SEIYUU_ROLES_QUERY = `
-query staff($seiyuuId: Int, $onList: Boolean) {
+query staff($seiyuuId: Int, $onList: Boolean, $page: Int) {
   Staff(id: $seiyuuId) {
-    characters(page: 1, sort: FAVOURITES_DESC) {
+    characters(page: $page, sort: FAVOURITES_DESC) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         node {
           id
