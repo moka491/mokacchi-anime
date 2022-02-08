@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { getSeiyuuAnimeRoles } from "~/api/anilist";
 import { Seiyuu, SeiyuuRole } from "~/api/anilist/types";
 import { AuthContext } from "~/context/AuthContext";
+import LoadingIndicator from "../shared/LoadingIndicator";
 import SeiyuuCard from "./SeiyuuCard";
 import SeiyuuRoleCard from "./SeiyuuRoleCard";
 
@@ -38,11 +39,14 @@ export default function SeiyuuOtherRolesColumn({
     hasNextPage: true,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const state = showUserAnime ? userEntries : entries;
 
   useEffect(() => {
     // if end of list is in sight and there's more data, load and cache it
     if (state.hasNextPage && inView) {
+      setLoading(true);
       getSeiyuuAnimeRoles(
         seiyuu.id,
         showUserAnime,
@@ -66,6 +70,8 @@ export default function SeiyuuOtherRolesColumn({
             hasNextPage: resp.hasNextPage && filteredRoles.length > 0,
           });
         }
+
+        setLoading(false);
       });
     }
   }, [inView]);
@@ -81,6 +87,11 @@ export default function SeiyuuOtherRolesColumn({
         />
       ))}
       <div ref={visibleHookRef}></div>
+      {loading && (
+        <div className="flex justify-center">
+          <LoadingIndicator />
+        </div>
+      )}
     </div>
   );
 }
