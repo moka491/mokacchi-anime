@@ -80,11 +80,7 @@ export default function SeiyuuOtherRolesColumn({
           role={role}
         />
       ))}
-      <div ref={visibleHookRef}>
-        {inView
-          ? `in view, page: ${state.page}, hasNextPage: ${state.hasNextPage}`
-          : "not in view"}
-      </div>
+      <div ref={visibleHookRef}></div>
     </div>
   );
 }
