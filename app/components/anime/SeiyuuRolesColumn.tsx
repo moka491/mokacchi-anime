@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { getSeiyuuAnimeRoles } from "~/api/anilist";
 import { Seiyuu, SeiyuuRole } from "~/api/anilist/types";
 import { AuthContext } from "~/context/AuthContext";
@@ -22,6 +23,7 @@ export default function SeiyuuOtherRolesColumn({
   showUserAnime = false,
 }: Props) {
   const { token } = useContext(AuthContext);
+  const { ref, inView } = useInView();
 
   const [roleState, setRoleState] = useState<RolesState>({
     roles: [],
@@ -31,7 +33,8 @@ export default function SeiyuuOtherRolesColumn({
   const roles = showUserAnime ? roleState.rolesUserOnly : roleState.roles;
 
   useEffect(() => {
-    if (!roles.length) {
+    // only load data if not already cached and the component is in view
+    if (!roles.length && inView) {
       getSeiyuuAnimeRoles(
         seiyuu.id,
         showUserAnime,
@@ -48,10 +51,10 @@ export default function SeiyuuOtherRolesColumn({
           );
         });
     }
-  }, [showUserAnime]);
+  }, [showUserAnime, inView]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div ref={ref} className="flex flex-col gap-4">
       <SeiyuuCard seiyuu={seiyuu} />
 
       {roles.map((role) => (
