@@ -57,13 +57,13 @@ export default function SeiyuuOtherRolesColumn({
           setUserEntries({
             roles: [...userEntries.roles, ...filteredRoles],
             page: userEntries.page + 1,
-            hasNextPage: resp.hasNextPage,
+            hasNextPage: resp.hasNextPage && filteredRoles.length > 0,
           });
         } else {
           setEntries({
             roles: [...entries.roles, ...filteredRoles],
             page: entries.page + 1,
-            hasNextPage: resp.hasNextPage,
+            hasNextPage: resp.hasNextPage && filteredRoles.length > 0,
           });
         }
       });
