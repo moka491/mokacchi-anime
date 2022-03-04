@@ -58,7 +58,7 @@ query($animeId: Int) {
 `;
 
 export const SEIYUU_ROLES_QUERY = `
-query staff($seiyuuId: Int, $onList: Boolean, $page: Int) {
+query($seiyuuId: Int, $onList: Boolean, $page: Int) {
   Staff(id: $seiyuuId) {
     characters(page: $page, sort: FAVOURITES_DESC) {
       pageInfo {
@@ -88,6 +88,50 @@ query staff($seiyuuId: Int, $onList: Boolean, $page: Int) {
           }
         }
       }
+    }
+  }
+}
+`;
+
+export const USER_ACTIVITIES_QUERY = `
+query($userId: Int, $page: Int) {
+  Page(page: $page, perPage: 50) {
+    activities(type: ANIME_LIST, sort: ID_DESC, userId: $userId) {
+      ... on ListActivity {
+        media {
+          id
+        }
+        status
+        progress
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+}
+`;
+
+export const USER_ANIME_DATES_QUERY = `
+query($userId: Int, $page: Int) {
+  Page(page: $page, perPage: 50) {
+    mediaList(type: ANIME, userId: $userId) {
+      id
+      createdAt
+      updatedAt
+      media {
+        id
+        title {
+          romaji
+          english
+        }
+        coverImage {
+          medium
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 }

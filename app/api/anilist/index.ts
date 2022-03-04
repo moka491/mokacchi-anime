@@ -12,9 +12,10 @@ import {
   SeiyuuRole,
   Paginated,
 } from "./types";
+import { fetchRetry } from "./utils";
 
 export function getCurrentUserInfo(accessToken: string): Promise<UserInfo> {
-  return fetch("https://graphql.anilist.co", {
+  return fetchRetry("https://graphql.anilist.co", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,7 +30,7 @@ export function getCurrentUserInfo(accessToken: string): Promise<UserInfo> {
 }
 
 export function searchAnime(search: string): Promise<Anime[]> {
-  return fetch("https://graphql.anilist.co", {
+  return fetchRetry("https://graphql.anilist.co", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,7 +50,7 @@ export function searchAnime(search: string): Promise<Anime[]> {
 export function getAnimeCharactersAndSeiyuus(
   animeId: number
 ): Promise<CharacterWithSeiyuus[]> {
-  return fetch("https://graphql.anilist.co", {
+  return fetchRetry("https://graphql.anilist.co", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -78,7 +79,7 @@ export function getSeiyuuAnimeRoles(
   page: number = 1,
   accessToken?: string
 ): Promise<Paginated<SeiyuuRole[]>> {
-  return fetch("https://graphql.anilist.co", {
+  return fetchRetry("https://graphql.anilist.co", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
