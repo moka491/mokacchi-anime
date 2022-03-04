@@ -1,6 +1,5 @@
 import { Outlet } from "remix";
 import Navbar from "./components/shared/Navbar";
-import NavbarLink from "./components/shared/NavbarLink";
 import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {

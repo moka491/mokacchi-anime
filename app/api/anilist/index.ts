@@ -4,6 +4,7 @@ import {
   ANIME_SEARCH_QUERY,
   CHARARCTER_SEIYUU_QUERY,
   SEIYUU_ROLES_QUERY,
+  USER_ACTIVITIES_QUERY,
 } from "./queries";
 import {
   UserInfo,
@@ -110,6 +111,30 @@ export function getSeiyuuAnimeRoles(
 
       const hasNextPage =
         json.data?.Staff.characters.pageInfo.hasNextPage || false;
+
+      return { data, hasNextPage };
+    });
+}
+
+export function getUserActivities(userId: number, page: number) {
+  return fetchRetry("https://graphql.anilist.co", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: USER_ACTIVITIES_QUERY,
+      variables: {
+        userId,
+        page,
+      },
+    }),
+  })
+    .then(handleErrors)
+    .then((resp) => resp.json())
+    .then((json) => {
+      const data = json.data.Page.activities;
+      const hasNextPage = json.data.Page.pageInfo.hasNextPage;
 
       return { data, hasNextPage };
     });

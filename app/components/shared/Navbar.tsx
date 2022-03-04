@@ -23,8 +23,8 @@ export default function Navbar() {
           <Link to="">
             <span className="hover:text-primary">Seiyuu Lookup</span>
           </Link>
-          <Link to="">
-            <span className="hover:text-primary">More coming soon</span>
+          <Link to="datefix">
+            <span className="hover:text-primary">Date Fixer</span>
           </Link>
         </div>
 

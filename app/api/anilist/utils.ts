@@ -2,20 +2,20 @@ const delay = (time: number) =>
   new Promise<void>((resolve) => setTimeout(() => resolve(), time));
 
 export async function* getAll(
-  request: (page: number) => Promise<[any[], boolean]>
+  request: (page: number) => Promise<{ data: any[]; hasNextPage: boolean }>
 ) {
   let page = 1;
   let hasMorePages = true;
 
   while (hasMorePages) {
-    yield await request(page).then(([entries, hasNextPage]) => {
+    yield await request(page).then(({ data, hasNextPage }) => {
       if (!hasNextPage) {
         hasMorePages = false;
+      } else {
+        page++;
       }
 
-      page++;
-
-      return entries;
+      return data;
     });
   }
 }
@@ -39,6 +39,7 @@ export async function fetchRetry(
       }
 
       return resp;
+      ß;
     });
   }
 
