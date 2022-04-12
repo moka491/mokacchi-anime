@@ -70,7 +70,8 @@ export class AnilistDateFixService {
       mediaEntries.push(...pageResp)
     }
 
-    this.mediaEntries = this.filterUnusedEntries(mediaEntries)
+    //this.mediaEntries = this.filterUnusedEntries(mediaEntries)
+    this.mediaEntries = mediaEntries
     this.activityMap = this.generateActivityMap(activities)
   }
 
@@ -88,13 +89,8 @@ export class AnilistDateFixService {
           return null
         }
 
-        if (!entry.startedAt.year) {
-          newStartDate = this.findStartDate(activities)
-        }
-
-        if (!entry.completedAt.year) {
-          newEndDate = this.findEndDate(activities)
-        }
+        newStartDate = this.findStartDate(activities)
+        newEndDate = this.findEndDate(activities)
 
         if (!newStartDate && !newEndDate) {
           return null

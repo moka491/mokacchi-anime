@@ -10,7 +10,7 @@ export default function DateFixChangePreviewTable({ changeList }: Props) {
       ? `${fuzzyDate.year}-${fuzzyDate.month}-${fuzzyDate.day}`
       : '-'
 
-  function tableColumn(oldDate, newDate) {
+  function tableColumn(oldDate: any, newDate: any) {
     return (
       <div>
         {newDate?.year ? (
@@ -29,7 +29,7 @@ export default function DateFixChangePreviewTable({ changeList }: Props) {
 
   return (
     <Card>
-      <div className="grid grid-cols-3 gap-2 text-textPrimary">
+      <div className="grid grid-cols-3 gap-4 text-textPrimary">
         {changeList.map((entry) => (
           <>
             <div>{entry.media.title.romaji}</div>

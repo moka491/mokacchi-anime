@@ -14,13 +14,13 @@ enum Step {
 }
 
 const DateFix: NextPage = () => {
-  const { loggedIn } = useContext(AuthContext)
+  const { loggedIn, userInfo } = useContext(AuthContext)
 
   const [currentStep, setCurrentStep] = useState<Step>(Step.NotStarted)
   const [changeList, setChangeList] = useState<any[]>([])
 
   const runDateFix = async () => {
-    const service = new AnilistDateFixService(86735)
+    const service = new AnilistDateFixService(userInfo.id)
 
     setCurrentStep(Step.Downloading)
     await service.prepareData()
