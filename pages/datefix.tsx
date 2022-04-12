@@ -1,129 +1,76 @@
-import { getUserActivities, getUserMediaWithDates } from 'api/anilist'
-import { getAll } from 'api/anilist/utils'
+import DateFixChangePreviewTable from 'components/anime/DateFixChangePreviewTable'
+import Button from 'components/shared/Button'
+import LoadingIndicator from 'components/shared/LoadingIndicator'
 import { AuthContext } from 'context/AuthContext'
 import { NextPage } from 'next'
-import { useContext, useEffect } from 'react'
+import { useContext, useState } from 'react'
+import { AnilistDateFixService } from 'services/AnilistDateFix'
 
-const getFuzzyDate = (timestamp: number) => {
-  const date = new Date(timestamp * 1000)
-
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-  }
+enum Step {
+  NotStarted,
+  Downloading,
+  PreviewChanges,
+  Uploading,
 }
 
 const DateFix: NextPage = () => {
   const { loggedIn } = useContext(AuthContext)
 
-  useEffect(() => {
-    ;(async () => {
-      const { activities, mediaEntries } = await downloadUserData()
+  const [currentStep, setCurrentStep] = useState<Step>(Step.NotStarted)
+  const [changeList, setChangeList] = useState<any[]>([])
 
-      const filteredMediaEntries = mediaEntries.filter(
-        (entry) =>
-          (!entry.startedAt.year || !entry.completedAt.year) &&
-          entry.updatedAt > 0
-      )
-      const activityMap: Record<number, any> = activities.reduce(
-        (acc, activity) => {
-          if (!acc[activity.media.id]) {
-            acc[activity.media.id] = []
-          }
+  const runDateFix = async () => {
+    const service = new AnilistDateFixService(86735)
 
-          acc[activity.media.id].push(activity)
-          return acc
-        },
-        {}
-      )
+    setCurrentStep(Step.Downloading)
+    await service.prepareData()
 
-      console.log({ activityMap, filteredMediaEntries })
+    const changes = service.calculateChanges()
 
-      const changeList = filteredMediaEntries
-        .map((entry) => {
-          let newStartDate, newEndDate
-
-          const activities = activityMap[entry.media.id]
-
-          if (!activities) {
-            return null
-          }
-
-          if (!entry.startedAt.year) {
-            newStartDate = findStartDate(activities)
-          }
-
-          if (!entry.completedAt.year) {
-            newEndDate = findEndDate(activities)
-          }
-
-          if (!newStartDate && !newEndDate) {
-            return null
-          }
-
-          return {
-            ...entry,
-            newStartDate,
-            newEndDate,
-          }
-        })
-        .filter((e) => !!e)
-
-      console.log({ changeList })
-    })()
-  }, [])
-
-  const downloadUserData = async () => {
-    const activities = []
-    const mediaEntries = []
-
-    for await (const pageResp of getAll((page) =>
-      getUserActivities(127851, page)
-    )) {
-      activities.push(...pageResp)
-    }
-
-    for await (const pageResp of getAll((page) =>
-      getUserMediaWithDates(127851, page)
-    )) {
-      mediaEntries.push(...pageResp)
-    }
-
-    return { activities, mediaEntries }
+    setChangeList(changes)
+    setCurrentStep(Step.PreviewChanges)
   }
 
-  const findStartDate = (activities: any[]) => {
-    const startedDate = activities.find(
-      (act) =>
-        act.status === 'watched episode' &&
-        (act.progress === '1' || act.progress.startsWith('1 '))
-    )?.createdAt
-
-    return startedDate ? getFuzzyDate(startedDate) : undefined
-  }
-
-  const findEndDate = (activities: any[]) => {
-    const completedDate = activities.find(
-      (act) => act.status === 'completed'
-    )?.createdAt
-
-    return completedDate ? getFuzzyDate(completedDate) : undefined
+  const currentStepHtml = (): React.ReactElement => {
+    switch (currentStep) {
+      case Step.NotStarted:
+        return (
+          <>
+            <span className="text-textPrimary">
+              Click 'Start' to run the Date Fixer
+            </span>
+            <Button label="Start" onClick={runDateFix} />
+          </>
+        )
+      case Step.Downloading:
+        return (
+          <>
+            <LoadingIndicator />
+            <span className="text-textPrimary">Downloading...</span>
+          </>
+        )
+      case Step.PreviewChanges:
+        return <DateFixChangePreviewTable changeList={changeList} />
+      case Step.Uploading:
+        return <span className="text-textPrimary">Uploading...</span>
+    }
   }
 
   return (
-    <div className="container mx-auto ">
-      <div className="my-6 flex flex-col items-center">
-        {!loggedIn && (
-          <>
-            <div className="text-textSecondary">
-              To use this tool, please login to your AniList account
-            </div>
-          </>
-        )}
+    <div className="flex flex-col flex-grow overflow-auto">
+      <div className="container mx-auto">
+        <div className="flex flex-col items-center my-6">
+          {loggedIn ? (
+            currentStepHtml()
+          ) : (
+            <>
+              <div className="text-textSecondary">
+                To use this tool, please login to your AniList account
+              </div>
+            </>
+          )}
+        </div>
       </div>
-
-      <div className="text-textPrimary">Downloading data...</div>
     </div>
   )
 }
