@@ -8,7 +8,7 @@ query {
     }
   }
 }
-`;
+`
 
 export const ANIME_SEARCH_QUERY = `
 query($search: String) { 
@@ -25,7 +25,7 @@ query($search: String) {
     }
   }
 }
-`;
+`
 
 export const CHARARCTER_SEIYUU_QUERY = `
 query($animeId: Int) { 
@@ -55,7 +55,7 @@ query($animeId: Int) {
       }
     }
   }
-`;
+`
 
 export const SEIYUU_ROLES_QUERY = `
 query($seiyuuId: Int, $onList: Boolean, $page: Int) {
@@ -91,7 +91,7 @@ query($seiyuuId: Int, $onList: Boolean, $page: Int) {
     }
   }
 }
-`;
+`
 
 export const USER_ACTIVITIES_QUERY = `
 query($userId: Int, $page: Int) {
@@ -103,6 +103,7 @@ query($userId: Int, $page: Int) {
         }
         status
         progress
+        createdAt
       }
     }
     pageInfo {
@@ -110,15 +111,24 @@ query($userId: Int, $page: Int) {
     }
   }
 }
-`;
+`
 
 export const USER_ANIME_DATES_QUERY = `
 query($userId: Int, $page: Int) {
   Page(page: $page, perPage: 50) {
     mediaList(type: ANIME, userId: $userId) {
       id
-      createdAt
       updatedAt
+      startedAt {
+        year
+        month
+        day
+      }
+      completedAt {
+        year
+        month
+        day
+      }
       media {
         id
         title {
@@ -135,4 +145,4 @@ query($userId: Int, $page: Int) {
     }
   }
 }
-`;
+`
