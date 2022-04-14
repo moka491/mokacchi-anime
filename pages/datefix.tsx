@@ -2,56 +2,36 @@ import DateFixChangePreviewTable from 'components/anime/DateFixChangePreviewTabl
 import Button from 'components/shared/Button'
 import LoadingIndicator from 'components/shared/LoadingIndicator'
 import { AuthContext } from 'context/AuthContext'
+import { useAnilistDateFixer } from 'hooks/useAnilistDateFixer'
 import { NextPage } from 'next'
-import { useContext, useState } from 'react'
-import { AnilistDateFixService } from 'services/AnilistDateFix'
-
-enum Step {
-  NotStarted,
-  Downloading,
-  PreviewChanges,
-  Uploading,
-}
+import { useContext } from 'react'
 
 const DateFix: NextPage = () => {
   const { loggedIn, userInfo, login } = useContext(AuthContext)
 
-  const [currentStep, setCurrentStep] = useState<Step>(Step.NotStarted)
-  const [changeList, setChangeList] = useState<any[]>([])
-
-  const runDateFix = async () => {
-    const service = new AnilistDateFixService(userInfo.id)
-
-    setCurrentStep(Step.Downloading)
-    await service.prepareData()
-
-    const changes = service.calculateChanges()
-
-    setChangeList(changes)
-    setCurrentStep(Step.PreviewChanges)
-  }
+  const { state, calculateChanges } = useAnilistDateFixer(userInfo?.id)
 
   const currentStepHtml = (): React.ReactElement => {
-    switch (currentStep) {
-      case Step.NotStarted:
+    switch (state.status) {
+      case 'idle':
         return (
           <>
             <span className="text-textPrimary">
               Click 'Start' to run the Date Fixer
             </span>
-            <Button label="Start" onClick={runDateFix} />
+            <Button label="Start" onClick={calculateChanges} />
           </>
         )
-      case Step.Downloading:
+      case 'downloading':
         return (
           <>
             <LoadingIndicator />
             <span className="text-textPrimary">Downloading...</span>
           </>
         )
-      case Step.PreviewChanges:
-        return <DateFixChangePreviewTable changeList={changeList} />
-      case Step.Uploading:
+      case 'calculation_done':
+        return <DateFixChangePreviewTable changeList={state.changeList as []} />
+      case 'uploading':
         return <span className="text-textPrimary">Uploading...</span>
     }
   }
