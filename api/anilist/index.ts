@@ -1,4 +1,3 @@
-import handleErrors from './error-handling'
 import {
   CURRENT_USER_QUERY,
   ANIME_SEARCH_QUERY,
@@ -14,37 +13,18 @@ import {
   SeiyuuRole,
   Paginated,
 } from './types'
-import { fetchRetry } from './utils'
+import { anilistQuery } from './utils'
 
 export function getCurrentUserInfo(accessToken: string): Promise<UserInfo> {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + accessToken,
-    },
-    body: JSON.stringify({
-      query: CURRENT_USER_QUERY,
-    }),
-  })
+  return anilistQuery(CURRENT_USER_QUERY, undefined, accessToken)
     .then((resp) => resp.json())
     .then((json) => json.data?.Viewer)
 }
 
 export function searchAnime(search: string): Promise<Anime[]> {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: ANIME_SEARCH_QUERY,
-      variables: {
-        search,
-      },
-    }),
+  return anilistQuery(ANIME_SEARCH_QUERY, {
+    search,
   })
-    .then(handleErrors)
     .then((resp) => resp.json())
     .then((json) => json.data?.Page.media || [])
 }
@@ -52,19 +32,9 @@ export function searchAnime(search: string): Promise<Anime[]> {
 export function getAnimeCharactersAndSeiyuus(
   animeId: number
 ): Promise<CharacterWithSeiyuus[]> {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: CHARARCTER_SEIYUU_QUERY,
-      variables: {
-        animeId,
-      },
-    }),
+  return anilistQuery(CHARARCTER_SEIYUU_QUERY, {
+    animeId,
   })
-    .then(handleErrors)
     .then((resp) => resp.json())
     .then(
       (json) =>
@@ -81,22 +51,15 @@ export function getSeiyuuAnimeRoles(
   page: number = 1,
   accessToken?: string
 ): Promise<Paginated<SeiyuuRole[]>> {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(accessToken && { Authorization: 'Bearer ' + accessToken }),
+  return anilistQuery(
+    SEIYUU_ROLES_QUERY,
+    {
+      seiyuuId,
+      onList,
+      page,
     },
-    body: JSON.stringify({
-      query: SEIYUU_ROLES_QUERY,
-      variables: {
-        seiyuuId,
-        onList,
-        page,
-      },
-    }),
-  })
-    .then(handleErrors)
+    accessToken
+  )
     .then((resp) => resp.json())
     .then((json) => {
       const data = json.data?.Staff.characters.edges
@@ -118,20 +81,10 @@ export function getSeiyuuAnimeRoles(
 }
 
 export function getUserActivities(userId: number, page: number) {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: USER_ACTIVITIES_QUERY,
-      variables: {
-        userId,
-        page,
-      },
-    }),
+  return anilistQuery(USER_ACTIVITIES_QUERY, {
+    userId,
+    page,
   })
-    .then(handleErrors)
     .then((resp) => resp.json())
     .then((json) => {
       const data = json.data.Page.activities
@@ -142,20 +95,10 @@ export function getUserActivities(userId: number, page: number) {
 }
 
 export function getUserMediaWithDates(userId: number, page: number) {
-  return fetchRetry('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: USER_ANIME_DATES_QUERY,
-      variables: {
-        userId,
-        page,
-      },
-    }),
+  return anilistQuery(USER_ANIME_DATES_QUERY, {
+    userId,
+    page,
   })
-    .then(handleErrors)
     .then((resp) => resp.json())
     .then((json) => {
       const data = json.data.Page.mediaList
