@@ -14,7 +14,7 @@ enum Step {
 }
 
 const DateFix: NextPage = () => {
-  const { loggedIn, userInfo } = useContext(AuthContext)
+  const { loggedIn, userInfo, login } = useContext(AuthContext)
 
   const [currentStep, setCurrentStep] = useState<Step>(Step.NotStarted)
   const [changeList, setChangeList] = useState<any[]>([])
@@ -67,6 +67,7 @@ const DateFix: NextPage = () => {
               <div className="text-textSecondary">
                 To use this tool, please login to your AniList account
               </div>
+              <Button label="Login to Anilist" onClick={login} />
             </>
           )}
         </div>

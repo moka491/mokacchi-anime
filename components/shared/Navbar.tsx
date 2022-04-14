@@ -4,11 +4,11 @@ import { useContext } from 'react'
 import Avatar from './Avatar'
 
 export default function Navbar() {
-  const { loggedIn, userInfo, logout } = useContext(AuthContext)
+  const { loggedIn, userInfo, login, logout } = useContext(AuthContext)
 
   function onAvatarClick() {
     if (!loggedIn) {
-      window.location.href = `https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID}&response_type=token`
+      login()
     } else {
       logout()
     }

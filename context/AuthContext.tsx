@@ -61,13 +61,17 @@ const AuthProvider = ({ children }: React.PropsWithChildren<{}>) => {
     }
   }, [])
 
+  function login() {
+    window.location.href = `https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID}&response_type=token`
+  }
+
   function logout() {
     setState(undefined)
     localStorage.removeItem('authState')
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
